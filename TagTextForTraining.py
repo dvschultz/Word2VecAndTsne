@@ -39,7 +39,7 @@ warnings.filterwarnings('ignore', '.*Unicode.*')
 
 # get number of lines in input file
 # (used for feedback during parsing later)
-print 'getting number of lines in file...'
+print('getting number of lines in file...')
 num_lines = 0
 with open(input_filename) as f:
 	for line in f:
@@ -47,16 +47,16 @@ with open(input_filename) as f:
 
 
 # parse line-by-line, split into words, get POS for each
-print 'parsing text...'
-print '- may take a while for large datasets'
+print('parsing text...')
+print('- may take a while for large datasets')
 with open(input_filename) as f:
 	if skip_ahead > 0:
-		print '- skipping ahead ' + str(skip_ahead) + ' lines...'
+		print('- skipping ahead ' + str(skip_ahead) + ' lines...')
 	
 	for i, line in enumerate(f):	
 		if i < skip_ahead:
 			continue
-		print '  - line ' + str(i+1) + ' / ' + str(num_lines)
+		print('  - line ' + str(i+1) + ' / ' + str(num_lines))
 		line = line.strip()
 		try:
 			pos = parse(line).split()[0]
@@ -68,5 +68,5 @@ with open(input_filename) as f:
 					out.write(p[0] + '_' + p[1] + '\n')
 				except UnicodeEncodeError:
 					pass
-print '- done!'
+print('- done!')
 

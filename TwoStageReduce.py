@@ -73,16 +73,16 @@ warnings.filterwarnings('ignore', '.*Unicode.*')
 
 
 # load existing model from file
-print 'loading model...' 
+print ('loading model...')
 model = models.Word2Vec.load(model_filename)
-print '- done'
+print ('- done')
 
 
 # load model as numpy array
 # if specified, keep only most common words
-print 'converting model/words to numpy array...'
+print ('converting model/words to numpy array...')
 if only_most_common:
-	print '- loading ' + str(num_common) + ' most common words...'
+	print ('- loading ' + str(num_common) + ' most common words...')
 	most_common = []
 	with open(common_filename) as f:
 		for i, line in enumerate(f):
@@ -90,9 +90,9 @@ if only_most_common:
 				break
 			most_common.append(line.strip())
 
-print '- creating list of words/vectors for reduction...'
+print ('- creating list of words/vectors for reduction...')
 if only_most_common:
-	print '  - keeping only ' + str(num_common) + ' most common words'
+	print ('  - keeping only ' + str(num_common) + ' most common words')
 
 vectors= []			# positions in vector space
 labels = []			# keep track of words to label our data again later
@@ -119,41 +119,41 @@ for word in model.vocab:
 	else:
 		vectors.append(model[word])
 		labels.append(word)
-print '- found ' + str(len(labels)) + ' entities x ' + str(len(vectors[0])) + ' dimensions'
+print ('- found ' + str(len(labels)) + ' entities x ' + str(len(vectors[0])) + ' dimensions')
 
 
 # convert both lists into numpy vectors for reduction
 vectors = np.asarray(vectors)
 labels =  np.asarray(labels)
-print '- done'
+print ('- done')
 
 
 # if specified, reduce using IncrementalPCA first (down 
 # to a smaller number of dimensions before the final reduction)
 if run_init_reduction:
-	print 'reducing to ' + str(init_dimensions) + 'D using IncrementalPCA...'
+	print ('reducing to ' + str(init_dimensions) + 'D using IncrementalPCA...')
 	ipca = IncrementalPCA(n_components=init_dimensions)
 	vectors = ipca.fit_transform(vectors)
-	print '- done'
+	print ('- done')
 
 	# save reduced vector space to file
-	print '- saving as csv...'
+	print ('- saving as csv...')
 	with open('ModelsAndData/' + model_name + '-' + str(init_dimensions) + 'D.csv', 'w') as f:
 		for i in range(len(labels)):
 			f.write(labels[i] + ',' + ','.join(map(str, vectors[i])) + '\n')
 
 
 # reduce using t-SNE
-print 'reducing to ' + str(num_dimensions) + 'D using t-SNE...'
-print '- may take a really, really (really) long time :)'
+print ('reducing to ' + str(num_dimensions) + 'D using t-SNE...')
+print ('- may take a really, really (really) long time :)')
 vectors = np.asarray(vectors)
 tsne = TSNE(n_components=num_dimensions, random_state=0)
 vectors = tsne.fit_transform(vectors)
-print '- done'
+print ('- done')
 
 
 # save reduced vector space to file
-print 'saving as csv...'
+print ('saving as csv...')
 x_vals = [ v[0] for v in vectors ]
 y_vals = [ v[1] for v in vectors ]
 with open('ModelsAndData/' + model_name + '-' + str(num_dimensions) + 'D.csv', 'w') as f:
@@ -162,19 +162,19 @@ with open('ModelsAndData/' + model_name + '-' + str(num_dimensions) + 'D.csv', '
 		x = x_vals[i]
 		y = y_vals[i]
 		f.write(label + ',' + str(x) + ',' + str(y) + '\n')
-print '- done'
+print ('- done')
 
 
 # normalize values -1 to 1, save to file
-print 'normalizing position values...'
+print ('normalizing position values...')
 x_vals = normalize_list(x_vals)
 y_vals = normalize_list(y_vals)
-print '- saving as csv...'
+print ('- saving as csv...')
 with open('ModelsAndData/' + model_name + '-' + str(num_dimensions) + 'D-NORMALIZED.csv', 'w') as f:
 	for i in range(len(labels)):
 		label = labels[i]
 		x = x_vals[i]
 		y = y_vals[i]
 		f.write(label + ',' + str(x) + ',' + str(y) + '\n')
-print '- done'
+print ('- done')
 

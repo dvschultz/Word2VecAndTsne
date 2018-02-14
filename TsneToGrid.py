@@ -29,7 +29,7 @@ skip_header = 	   False		# if csv has a header, skip it
 
 
 # load 2D tsne data
-print 'loading tsne data...'
+print('loading tsne data...')
 labels = []
 points = []
 header = None
@@ -44,25 +44,25 @@ with open(input_filename) as f:
 		y = float(data[2])
 		labels.append(syllable)
 		points.append([x,y])
-print '- found ' + str(len(labels)) + ' unique words'
+print('- found ' + str(len(labels)) + ' unique words')
 
 
 # convert to tsne object and grid it
-print 'reformatting into a grid...'
+print('reformatting into a grid...')
 xy = TSNE().fit_transform(points)
 arrangements = rasterfairy.getRectArrangements(len(labels))
 grid_xy, (width, height) = rasterfairy.transformPointCloud2D(xy)
-print '- grid dimensions: ' + str(width) + ' x ' + str(height)
-print '- done'
+print('- grid dimensions: ' + str(width) + ' x ' + str(height))
+print('- done')
 
 
 # write out grid data to file
-print 'saving to file...'
+print ('saving to file...')
 data = zip(labels, grid_xy)
 with open(output_filename, 'w') as f:
 	if header is not None:				# put back csv header, if there was one
 		f.write(header)
 	for label, point in data:
 		f.write(label + ',' + str(int(point[0])) + ',' + str(int(point[1])) + '\n')
-print '- done!'
+print ('- done!')
 
