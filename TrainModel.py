@@ -24,14 +24,14 @@ skip_gram = 	  False
 
 
 # create vocabulary
-print 'building vocabulary...'
+print('building vocabulary...')
 model = models.Word2Vec()
 sentences = models.word2vec.LineSentence(input_filename)
 model.build_vocab(sentences)
 
 
 # train model
-print 'training model...'
+print('training model...')
 if skip_gram:
 	model.train(sentences, sg=1)
 else:
@@ -39,9 +39,9 @@ else:
 
 
 # and save
-print '- saving model...'
+print('- saving model...')
 model.save(model_filename)
 
 # bye
-print 'all done, whew!'
+print('all done, whew!')
 
