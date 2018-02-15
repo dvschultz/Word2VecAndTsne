@@ -1,3 +1,27 @@
+
+'''
+TWO STAGE REDUCE
+Jeff Thompson | 2016-17 | jeffreythompson.org
+Modified 2018 by Derrick Schultz to work with SpaCy
+
+Loads spaCy model, reduces to N dimensions.
+
+(Then, optionally use TsneToGrid.py to convert to a 2D grid)
+
+OPTIONS
++ Do an initial reduction, best for large data sets
+  that would choke on a direct 2D reduction - uses
+  PCA from sklearn (much faster than tsne)
++ Keep only N most common words, also helpful for
+  large data sets - any count up to 50k allowed
+
+REQUIRES
++ spacy
++ sklearn
++ numpy
+
+'''
+
 from __future__ import unicode_literals
 import spacy
 # from gensim import models, matutils					# word2vec model loading
@@ -9,7 +33,7 @@ import numpy as np 									# array handling
 text_filename =    'ModelsAndData/dec_ind.txt'		# model file to reduce
 model_name = 		'DeclarationInd'							# name for exporting files
 
-num_dimensions =     2				# final num dimensions (2D, 3D, etc)
+num_dimensions =     3				# final num dimensions (2D, 3D, etc)
 
 run_init_reduction = True			# run an initial reduction with PCA?
 init_dimensions =    30				# initial reduction before t-SNE
@@ -97,23 +121,27 @@ print ('- done')
 print ('saving as csv...')
 x_vals = [ v[0] for v in vectors ]
 y_vals = [ v[1] for v in vectors ]
+z_vals = [ v[2] for v in vectors ]
 with open('ModelsAndData/' + model_name + '-' + str(num_dimensions) + 'D.csv', 'w') as f:
 	for i in range(len(labels)):
 		label = labels[i]
 		x = x_vals[i]
 		y = y_vals[i]
-		f.write(label + ',' + str(x) + ',' + str(y) + '\n')
+		z = z_vals[i]
+		f.write(label + ',' + str(x) + ',' + str(y) + ',' + str(z) + '\n')
 print ('- done')
 
 # normalize values -1 to 1, save to file
 print ('normalizing position values...')
 x_vals = normalize_list(x_vals)
 y_vals = normalize_list(y_vals)
+z_vals = normalize_list(z_vals)
 print ('- saving as csv...')
 with open('ModelsAndData/' + model_name + '-' + str(num_dimensions) + 'D-NORMALIZED.csv', 'w') as f:
 	for i in range(len(labels)):
 		label = labels[i]
 		x = x_vals[i]
 		y = y_vals[i]
-		f.write(label + ',' + str(x) + ',' + str(y) + '\n')
+		z = z_vals[i]
+		f.write(label + ',' + str(x) + ',' + str(y) + ',' + str(z) + '\n')
 print ('- done')
