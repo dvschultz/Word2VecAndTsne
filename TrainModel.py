@@ -25,9 +25,10 @@ skip_gram = 	  False
 
 # create vocabulary
 print('building vocabulary...')
-model = models.Word2Vec()
 sentences = models.word2vec.LineSentence(input_filename)
+model = models.Word2Vec(sentences)
 model.build_vocab(sentences)
+
 
 
 # train model
