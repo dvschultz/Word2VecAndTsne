@@ -6,7 +6,7 @@ from sklearn.manifold import TSNE 					# final reduction
 import numpy as np 									# array handling
 # import os, warnings
 
-# model_filename =    'ModelsAndData/TimeMachine.model'		# model file to reduce
+text_filename =    'ModelsAndData/dec_ind.txt'		# model file to reduce
 model_name = 		'DeclarationInd'							# name for exporting files
 
 num_dimensions =     2				# final num dimensions (2D, 3D, etc)
@@ -49,7 +49,7 @@ nlp = spacy.load('en_core_web_md')
 print ('- done')
 
 print ('loading text...')
-doc = nlp(open("./ModelsAndData/dec_ind.txt").read())
+doc = nlp(open(text_filename).read())
 print ('- done')
 
 # all of the words in the text file
